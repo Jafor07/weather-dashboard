@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ============================================================
 # WeatherSphere
 # Global Weather Dashboard for the InitZone Frontend Contest
@@ -148,3 +149,7 @@ WeatherSphere is a polished, mobile-first global weather dashboard that turns a 
 Built by Abu Jafar for the InitZone Frontend Intern Contest.
 
 Released under the MIT License.
+=======
+# weather-dashboard
+A responsive weather dashboard with live forecasts, country profiles, temperature trends, saved searches, and dark/light mode.
+>>>>>>> 18c9c5d3a063afec74c1fbfb0b8db1f42aa5e134
