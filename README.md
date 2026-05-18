@@ -118,24 +118,15 @@ weather-dashboard/
 | Unsplash Search Photos | `https://api.unsplash.com/search/photos` | Loads optional city background images when an Unsplash key is configured. |
 
 ## Screenshots
+<img width="1277" height="857" alt="image" src="https://github.com/user-attachments/assets/1e56c6be-ee2e-493a-bb2c-142ddd7b158f" />
+<img width="1277" height="857" alt="image" src="https://github.com/user-attachments/assets/d7ca3353-9f9e-46b0-9f6e-2c92be761731" />
+<img width="1316" height="861" alt="image" src="https://github.com/user-attachments/assets/d342cd3d-c266-4f25-b1d8-16eb2b2d4b7d" />
+<img width="1687" height="827" alt="image" src="https://github.com/user-attachments/assets/2c4d52c5-ee10-4605-86f7-d1d65538b8e5" />
+<img width="749" height="1600" alt="image" src="https://github.com/user-attachments/assets/33cf4b6a-34da-4b39-8fbc-562d80f8a7e3" />
 
-Add final screenshots before submission.
 
-```text
-public/screenshots/landing.png
-public/screenshots/dashboard-dark.png
-public/screenshots/dashboard-light.png
-public/screenshots/mobile.png
-```
 
-Update this section with Markdown image links after adding the files:
 
-```md
-![Landing page](./public/screenshots/landing-dark.png)
-![Dashboard dark mode](./public/screenshots/dashboard-dark.png)
-![Dashboard light mode](./public/screenshots/dashboard-light.png)
-![Mobile view](./public/screenshots/mobile.png)
-```
 
 ## License
 
