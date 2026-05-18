@@ -30,26 +30,39 @@ export default function App() {
 
   const [historyTick, setHistoryTick] = useState(0)
   const [lastCity, setLastCity] = useState('')
+  const [activeCity, setActiveCity] = useState('')
+  const [view, setView] = useState('home')
   const [unit, setUnit] = useState('c')
 
   const handleSearch = async (city) => {
     setLastCity(city)
     const success = await fetchWeather(city)
-    if (success) setHistoryTick((tick) => tick + 1)
+    if (success) {
+      setActiveCity(city)
+      setView('dashboard')
+      setHistoryTick((tick) => tick + 1)
+    }
   }
 
   const hasData = Boolean(weatherData) && !loading
+  const isDashboard = view === 'dashboard' && hasData
   const isDay = weatherData
     ? weatherData.dt > weatherData.sys.sunrise && weatherData.dt < weatherData.sys.sunset
     : true
-  const bgClass = hasData ? conditionBgClass(weatherData?.weather?.[0]?.id, isDay) : 'weather-bg-clear'
+  const bgClass = isDashboard ? conditionBgClass(weatherData?.weather?.[0]?.id, isDay) : 'weather-bg-clear'
 
   return (
     <div className="app-wrapper">
       <div className={`weather-bg ${bgClass}`} aria-hidden="true" />
       <div className="app-content">
-        <Header theme={theme} toggleTheme={toggleTheme} />
-        <SearchBar onSearch={handleSearch} loading={loading} />
+        <Header
+          theme={theme}
+          toggleTheme={toggleTheme}
+          view={view}
+          setView={setView}
+          setActiveCity={setActiveCity}
+        />
+        <SearchBar key={view === 'home' ? 'home' : activeCity || 'dashboard'} onSearch={handleSearch} loading={loading} />
 
         <AnimatePresence mode="wait">
           {loading && <Loader key="loader" />}
@@ -65,7 +78,7 @@ export default function App() {
 
           {!loading && !error && (
             <motion.div key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              {hasData ? (
+              {isDashboard ? (
                 <div className="dashboard-grid">
                   <main className="dashboard-main">
                     <WeatherCard data={weatherData} cityPhoto={cityPhoto} unit={unit} onUnitChange={setUnit} />
