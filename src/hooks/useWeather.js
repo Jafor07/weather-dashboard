@@ -7,6 +7,7 @@ import {
 } from '../services/weatherApi'
 import { fetchCityPhoto } from '../services/photoApi'
 import { saveSearchCity } from '../services/storage'
+import { parseCityQuery } from '../utils/queryParser'
 
 function getFriendlyError(error) {
   if (!navigator.onLine) {
@@ -36,8 +37,8 @@ export function useWeather() {
   const [error, setError] = useState('')
 
   const fetchWeather = useCallback(async (city) => {
-    const query = city.trim()
-    if (!query) {
+    const parsedQuery = parseCityQuery(city)
+    if (!parsedQuery.city) {
       setError('Enter a city name to explore its weather.')
       return false
     }
@@ -53,20 +54,20 @@ export function useWeather() {
 
     try {
       const [current, forecast] = await Promise.all([
-        fetchCurrentWeather(query),
-        fetchForecast(query),
+        fetchCurrentWeather(parsedQuery.apiQuery),
+        fetchForecast(parsedQuery.apiQuery),
       ])
 
       const [country, photo] = await Promise.all([
         fetchCountryByCode(current.sys?.country),
-        fetchCityPhoto(current.name || query, current.sys?.country),
+        fetchCityPhoto(current.name || parsedQuery.city, current.sys?.country),
       ])
 
       setWeatherData(current)
       setForecastData(forecast)
       setCountryData(country)
       setCityPhoto(photo)
-      saveSearchCity(current.name || query, current.sys?.country)
+      saveSearchCity(current.name || parsedQuery.city, current.sys?.country)
       return true
     } catch (requestError) {
       setError(getFriendlyError(requestError))

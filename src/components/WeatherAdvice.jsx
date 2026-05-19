@@ -23,34 +23,44 @@ function getComfortScore(temp, humidity, windSpeed) {
   const humidityPenalty = Math.max(humidity - 55, 0) * 0.45
   const humidHeatPenalty = humidity > 70 ? 15 : humidity > 60 ? 8 : 0
   const windPenalty = Math.max(windSpeed - 5, 0) * 2
-  return Math.max(35, Math.min(98, Math.round(96 - heatPenalty - humidityPenalty - humidHeatPenalty - windPenalty)))
+  return clampComfortScore(96 - heatPenalty - humidityPenalty - humidHeatPenalty - windPenalty)
+}
+
+function clampComfortScore(score) {
+  return Math.max(0, Math.min(100, Math.round(score)))
 }
 
 function getComfortProfile(temp, humidity, windSpeed) {
   const score = getComfortScore(temp, humidity, windSpeed)
 
   if (temp >= 32 || humidity >= 82) {
-    return { label: 'High Humidity', score: Math.min(score, 64), tone: 'warning' }
+    return { label: 'High Humidity', score: clampComfortScore(Math.min(score, 64)), tone: 'warning' }
   }
   if (temp >= 30 && humidity >= 70) {
-    return { label: 'Hot', score: Math.min(score, 62), tone: 'hot' }
+    return { label: 'Hot', score: clampComfortScore(Math.min(score, 62)), tone: 'hot' }
   }
   if (temp >= 28 || humidity >= 70) {
-    return { label: 'Warm', score: Math.min(score, 72), tone: 'warm' }
+    return { label: 'Warm', score: clampComfortScore(Math.min(score, 72)), tone: 'warm' }
   }
   if (windSpeed >= 9) {
-    return { label: 'Breezy', score: Math.min(score, 72), tone: 'cool' }
+    return { label: 'Breezy', score: clampComfortScore(Math.min(score, 72)), tone: 'cool' }
   }
   if (temp >= 20 && temp <= 27 && humidity <= 60) {
-    return { label: 'Comfortable', score: Math.max(score, 80), tone: 'good' }
+    return { label: 'Comfortable', score: clampComfortScore(Math.max(score, 80)), tone: 'good' }
   }
 
-  return { label: 'Moderate', score: Math.min(Math.max(score, 58), 76), tone: 'moderate' }
+  return { label: 'Moderate', score: clampComfortScore(Math.min(Math.max(score, 58), 76)), tone: 'moderate' }
 }
 
-function formatComfortScoreUnits(score) {
-  const celsiusEquivalent = Math.floor(((score - 32) * 5) / 9)
-  return `${score}\u00b0F / ${celsiusEquivalent}\u00b0C`
+function formatComfortScore(score) {
+  return `${clampComfortScore(score)}/100`
+}
+
+function getComfortSummary(score) {
+  if (score >= 80) return 'Good outdoor comfort'
+  if (score >= 65) return 'Fair outdoor comfort'
+  if (score >= 50) return 'Use some caution'
+  return 'Limit long exposure'
 }
 
 export default function WeatherAdvice({ data, unit = 'c' }) {
@@ -63,8 +73,9 @@ export default function WeatherAdvice({ data, unit = 'c' }) {
   const timezone = data.timezone || 0
   const advice = getClothingTip(temp, humidity, conditionId)
   const comfort = getComfortProfile(temp, humidity, windSpeed)
-  const comfortUnits = formatComfortScoreUnits(comfort.score)
-  const comfortExplanation = 'Comfort Index combines temperature, humidity, and wind into an outdoor comfort score. Higher means easier to stay outside.'
+  const comfortScore = formatComfortScore(comfort.score)
+  const comfortSummary = getComfortSummary(comfort.score)
+  const comfortExplanation = 'Comfort Score combines temperature, humidity, and wind into an outdoor comfort score. Higher means easier to stay outside.'
 
   return (
     <section className="advice-card glass">
@@ -75,12 +86,12 @@ export default function WeatherAdvice({ data, unit = 'c' }) {
         </div>
         <span
           className={`comfort-badge comfort-badge-${comfort.tone}`}
-          aria-label={`Comfort Index ${comfort.score} out of 100. ${comfortExplanation}`}
+          aria-label={`Comfort Score ${comfort.score} out of 100. ${comfortExplanation}`}
           title={comfortExplanation}
         >
-          <small>Comfort Index</small>
-          <strong>{comfort.score}</strong>
-          <span className="comfort-units">{comfortUnits}</span>
+          <small>Comfort Score</small>
+          <strong>{comfortScore}</strong>
+          <span className="comfort-summary">{comfortSummary}</span>
         </span>
       </div>
 

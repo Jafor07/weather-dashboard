@@ -2,14 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useMemo, useState } from 'react'
 import { FiMapPin, FiSearch, FiX } from 'react-icons/fi'
 import { POPULAR_CITIES } from '../utils/constants'
-
-function formatCityQuery(value) {
-  return value
-    .trim()
-    .replace(/\s+/g, ' ')
-    .toLowerCase()
-    .replace(/(^|[\s-])([a-z])/g, (_, prefix, letter) => `${prefix}${letter.toUpperCase()}`)
-}
+import { parseCityQuery } from '../utils/queryParser'
 
 export default function SearchBar({ onSearch, loading }) {
   const [query, setQuery] = useState('')
@@ -19,24 +12,25 @@ export default function SearchBar({ onSearch, loading }) {
     const needle = query.trim().toLowerCase()
     if (!needle) return POPULAR_CITIES.slice(0, 5)
     return POPULAR_CITIES
-      .filter((item) => `${item.city} ${item.country}`.toLowerCase().includes(needle))
+      .filter((item) => `${item.city} ${item.country} ${item.countryCode}`.toLowerCase().includes(needle))
       .slice(0, 6)
   }, [query])
 
   const submitSearch = (event) => {
     event.preventDefault()
-    const city = formatCityQuery(query)
-    if (city) {
-      setQuery(city)
+    const parsedQuery = parseCityQuery(query)
+    if (parsedQuery.city) {
+      setQuery(parsedQuery.displayQuery)
       setFocused(false)
-      onSearch(city)
+      onSearch(parsedQuery.displayQuery)
     }
   }
 
-  const selectSuggestion = (city) => {
-    setQuery(city)
+  const selectSuggestion = (item) => {
+    const displayQuery = `${item.city}, ${item.countryCode}`
+    setQuery(displayQuery)
     setFocused(false)
-    onSearch(city)
+    onSearch(displayQuery)
   }
 
   return (
@@ -49,7 +43,7 @@ export default function SearchBar({ onSearch, loading }) {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           onFocus={() => setFocused(true)}
-          placeholder="Search any city..."
+          placeholder="Search city, e.g. Dhaka or London, GB"
           aria-label="Search city"
           aria-expanded={focused && suggestions.length > 0}
           autoComplete="off"
@@ -85,11 +79,11 @@ export default function SearchBar({ onSearch, loading }) {
                 type="button"
                 key={`${item.city}-${item.country}`}
                 onMouseDown={(event) => event.preventDefault()}
-                onClick={() => selectSuggestion(item.city)}
+                onClick={() => selectSuggestion(item)}
               >
                 <FiMapPin />
                 <span>{item.city}</span>
-                <small>{item.country}</small>
+                <small>{item.countryCode} - {item.country}</small>
               </button>
             ))}
           </motion.div>

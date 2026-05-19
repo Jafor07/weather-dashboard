@@ -4,21 +4,21 @@ export const STORAGE_KEYS = {
 }
 
 export const POPULAR_CITIES = [
-  { city: 'Dhaka', country: 'Bangladesh' },
-  { city: 'Mymensingh', country: 'Bangladesh' },
-  { city: 'Chittagong', country: 'Bangladesh' },
-  { city: 'London', country: 'United Kingdom' },
-  { city: 'Tokyo', country: 'Japan' },
-  { city: 'New York', country: 'United States' },
-  { city: 'Paris', country: 'France' },
-  { city: 'Dubai', country: 'United Arab Emirates' },
-  { city: 'Singapore', country: 'Singapore' },
-  { city: 'Sydney', country: 'Australia' },
-  { city: 'Toronto', country: 'Canada' },
-  { city: 'Istanbul', country: 'Turkey' },
-  { city: 'Cairo', country: 'Egypt' },
-  { city: 'Seoul', country: 'South Korea' },
-  { city: 'Cape Town', country: 'South Africa' },
+  { city: 'Dhaka', country: 'Bangladesh', countryCode: 'BD' },
+  { city: 'Mymensingh', country: 'Bangladesh', countryCode: 'BD' },
+  { city: 'Chittagong', country: 'Bangladesh', countryCode: 'BD' },
+  { city: 'London', country: 'United Kingdom', countryCode: 'GB' },
+  { city: 'Tokyo', country: 'Japan', countryCode: 'JP' },
+  { city: 'New York', country: 'United States', countryCode: 'US' },
+  { city: 'Paris', country: 'France', countryCode: 'FR' },
+  { city: 'Dubai', country: 'United Arab Emirates', countryCode: 'AE' },
+  { city: 'Singapore', country: 'Singapore', countryCode: 'SG' },
+  { city: 'Sydney', country: 'Australia', countryCode: 'AU' },
+  { city: 'Toronto', country: 'Canada', countryCode: 'CA' },
+  { city: 'Istanbul', country: 'Turkey', countryCode: 'TR' },
+  { city: 'Cairo', country: 'Egypt', countryCode: 'EG' },
+  { city: 'Seoul', country: 'South Korea', countryCode: 'KR' },
+  { city: 'Cape Town', country: 'South Africa', countryCode: 'ZA' },
 ]
 
 export const WELCOME_CITIES = ['Dhaka', 'Mymensingh', 'London', 'Tokyo', 'New York', 'Dubai']
