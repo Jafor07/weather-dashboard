@@ -56,6 +56,41 @@ npm install
 cp .env.example .env
 npm run dev
 ```
+## Troubleshooting
+
+### Weather data is not loading
+
+- Confirm that your OpenWeatherMap API key is valid.
+- Verify that `VITE_OWM_KEY` is configured in your local `.env` file.
+- Restart the Vite development server after changing environment variables.
+- Check the browser console and Network tab for API errors.
+
+### Local development server fails to start
+
+- Confirm that Node.js and npm are installed.
+- Run `npm install` to install project dependencies.
+- Run `npm run dev` to start the development server.
+- Read the terminal output to identify any missing dependencies or configuration errors.
+
+### Vercel deployment fails
+
+- Review the failed deployment's build logs.
+- Confirm that the project uses the Vite framework configuration.
+- Verify that the build command is `npm run build`.
+- Confirm that the output directory is `dist`.
+- Add required environment variables in the Vercel project settings.
+- Redeploy after correcting the underlying problem.
+
+### Useful Commands
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run lint
+```
+
+These commands install dependencies, start the development server, build the production application, and run ESLint checks respectively.
 
 Open the local Vite URL shown in the terminal, usually `http://localhost:5173/`.
 
